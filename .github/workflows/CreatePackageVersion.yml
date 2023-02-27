@@ -54,8 +54,8 @@ on:
         required: true
         default: 'core'
         options: 
-        - app1
-        - app2
+        - App1
+        - App2
         - core
       waitTime:
         type: integer
@@ -86,7 +86,7 @@ jobs:
           echo "PACKAGE_NAME: ${PACKAGE_NAME}""
           echo "WAIT: ${WAIT}""
           sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-          COMMAND="sfdx package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB"      
+          COMMAND="sfdx package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB --verbose"      
           if ${RUN_APEX_TESTS}; then
             echo "Adding Code Coverage" 
             COMMAND="${COMMAND} --codecoverage " 

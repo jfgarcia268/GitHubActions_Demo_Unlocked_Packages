@@ -36,7 +36,7 @@ jobs:
     - name: Scan   
       run: |
         export HOME=/root
-        sfdx scanner:run --outfile Result.csv --format csv --target salesforce_sfdx   
+        sfdx scanner:run --outfile Result.csv --format csv --target "force-app-${{ needs.getBranchName.outputs.branchName }}"
     - uses: actions/upload-artifact@v3
       with:
         name: Scan-Result

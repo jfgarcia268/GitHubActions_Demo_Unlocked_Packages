@@ -5,7 +5,7 @@
       "default": true
     },
     {
-      "path": "force-app-app1",
+      "path": "force-app-App1",
       "package": "App1",
       "versionName": "ver 0.1",
       "versionNumber": "0.1.0.NEXT",
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "path": "force-app-app2",
+      "path": "force-app-App2",
       "package": "App2",
       "versionName": "ver 0.1",
       "versionNumber": "0.1.0.NEXT",
