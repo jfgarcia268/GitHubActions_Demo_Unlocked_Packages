@@ -18,7 +18,7 @@ jobs:
     container:
       image: jfgarcia268/vlocity_sfdx:core
     steps:  
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Login DevHub
@@ -33,8 +33,8 @@ jobs:
         if [ -f org.info ]; then
           rm org.info  
         fi
-        sfdx org:display --verbose --target-org ALIAS >> org.info
-        sfdx org:display --verbose --target-org ALIAS --json >> credential.json
+        sfdx org:display --target-org ALIAS --verbose  >> org.info
+        sfdx org:display --target-org ALIAS --verbose --json >> credential.json
         SO_SFDX_URL=$( jq -r  '.result.sfdxAuthUrl' credential.json) 
         echo "SO_SFDX_URL=$(SO_SFDX_URL)\n" >> $GITHUB_OUTPUT
     - uses: actions/upload-artifact@v3
