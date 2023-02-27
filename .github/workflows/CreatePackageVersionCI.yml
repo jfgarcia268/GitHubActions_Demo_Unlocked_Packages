@@ -11,12 +11,15 @@ jobs:
       - name: Get branch name
         id: branch-name
         uses: tj-actions/branch-names@v5.2
+    outputs: 
+      branchName: ${{ steps.branch-name.outputs.current_branch }} 
   createVersion:
+      needs: getBranchName
       uses: ./.github/workflows/CreatePackageVersion.yml
       with:
         runApexTest: 'true'
         skipValidation: 'false'
-        packageName: ${{ jobs.getBranchName.steps.branch-name.outputs.current_branch }} 
+        packageName: ${{ needs.getBranchName.outputs.branchName }}
         waitTime: 1000
       secrets:
         DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
