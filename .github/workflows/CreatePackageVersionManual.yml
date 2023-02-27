@@ -42,4 +42,4 @@ jobs:
           runApexTest: ${{ inputs.runApexTestInput }}
           skipValidation: ${{ inputs.skipValidationInput }}
           packageName: ${{ inputs.packageNameInput }}
-          runApexTest: ${{ inputs.usernameInput }}
+          waitTime: ${{ inputs.usernameInput }}
