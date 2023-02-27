@@ -25,7 +25,33 @@ jobs:
         DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
         RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
         PACKAGES_KEY: ${{ secrets.PACKAGES_KEY }}
+  CreateSO:
+    needs: createVersion
+    runs-on: ubuntu-latest
+    container:
+      image: jfgarcia268/vlocity_sfdx:core
+    steps:  
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Login DevHub
+      run: |
+          echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
+          sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
+    - name: Create SO
+      run: |
+        sfdx force:org:create --definitionfile config/project-scratch-def.json -a ALIAS --durationdays 29 --targetdevhubusername DEVHUB
+        sfdx force:user:password:generate --targetusername ALIAS --targetdevhubusername DEVHUB
+        if [ -f org.info ]; then
+          rm org.info  
+        fi
+        sfdx force:org:display --verbose --targetusername ALIAS  --verbose >> org.info
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Org-Credentials
+        path: ./org.info  
   CodeScan:
+    needs: getBranchName
     runs-on: ubuntu-latest
     container:
       image: jfgarcia268/vlocity_sfdx:latest
@@ -37,6 +63,7 @@ jobs:
       run: |
         export HOME=/root
         sfdx scanner:run --outfile Result.csv --format csv --target "force-app-${{ needs.getBranchName.outputs.branchName }}"
+        ls -la
     - uses: actions/upload-artifact@v3
       with:
         name: Scan-Result
