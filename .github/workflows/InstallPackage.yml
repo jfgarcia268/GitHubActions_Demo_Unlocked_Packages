@@ -28,7 +28,7 @@ on:
         required: true
 
 jobs:
-  Deploy:
+  InstallPackages:
     runs-on: ubuntu-latest
     container:
       image: jfgarcia268/vlocity_sfdx:latest

@@ -14,12 +14,23 @@ echo "## Getting Version From Project File sfdx-project.json"
 for (( i=0; i<$NUM_PACKAGES; i++ ))
 do
 	PACKAGE=$(jq -r ".packageDirectories[${i}].package" sfdx-project.json)
-	echo "$PACKAGE - $PACKAGE_NAME"
+	#echo "$PACKAGE - $PACKAGE_NAME"
 	if [ "$PACKAGE" == "$PACKAGE_NAME" ]; then
 		VERSION=$(jq -r .packageDirectories[0].versionNumber sfdx-project.json)
-		MAYOR_VERSION="$(cut -d'.' -f1 <<< "$VERSION")"
-		MINOR_VERSION="$(cut -d'.' -f2 <<< "$VERSION")"
-		PATCH_VERSION="$(cut -d'.' -f3 <<< "$VERSION")"
+		# "versionNumber": "0.1.0.NEXT",
+		delimiter="."
+		s=$VERSION$delimiter
+		array=();
+		while [[ $s ]]; do
+			array+=( "${s%%"$delimiter"*}" );
+			s=${s#*"$delimiter"};
+		done;
+		MAYOR_VERSION=${array[0]}
+		MINOR_VERSION=${array[1]}
+		PATCH_VERSION=${array[2]}
+		echo "MAYOR_VERSION: ${MAYOR_VERSION}"
+		echo "MINOR_VERSION: ${MINOR_VERSION}"
+		echo "PATCH_VERSION: ${PATCH_VERSION}"
 	fi	
 done
 
@@ -28,7 +39,7 @@ PACKAGE2_ID=$(jq -r ".packageAliases.${PACKAGE_NAME}"  sfdx-project.json)
 echo "## Getting Latest Build Number for Package: $PACKAGE_NAME ($PACKAGE2_ID) "
 QUERY="SELECT BuildNumber, SubscriberPackageVersionId FROM Package2Version WHERE MajorVersion=${MAYOR_VERSION} AND MinorVersion=${MINOR_VERSION} AND PatchVersion=${PATCH_VERSION} AND Package2Id='${PACKAGE2_ID}' ORDER BY BuildNumber DESC LIMIT 1"
 echo "QUERY: ${QUERY}"
-RESULT=$(sfdx data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY" )
+RESULT=$(sfdx force:data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY" )
 BUILD_NUMBER=$(jq -r .result.records[0].BuildNumber <<< "$RESULT")
 PACKAGE_ID=$(jq -r .result.records[0].SubscriberPackageVersionId <<< "$RESULT")
 
