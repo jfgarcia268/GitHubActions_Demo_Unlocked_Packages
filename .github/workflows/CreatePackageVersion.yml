@@ -4,18 +4,22 @@ on:
   workflow_call:
     inputs:
       runApexTest:
+        type: string
         description: 'Run Apex Code Coverage'  
         required: true
         default: 'true'
       skipValidation:
+        type: string
         description: 'Skip Package Validation'     
         required: true
         default: 'false' 
       packageName:
+        type: string
         description: Package Name
         required: true
         default: 'core'
       waitTime:
+        type: string
         description: 'Wait time to create Package'     
         required: true
         default: 1000   
