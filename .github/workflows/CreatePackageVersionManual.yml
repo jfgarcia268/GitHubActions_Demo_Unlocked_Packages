@@ -35,10 +35,10 @@ on:
 
 jobs:
   createVersion:
-    uses: ./.github/workflows/CreatePackageVersion.yml
-    name: Create Package Version Manual
-    with:
-      runApexTest: ${{ inputs.runApexTestInput }}
-      skipValidation: ${{ inputs.skipValidationInput }}
-      packageName: ${{ inputs.packageNameInput }}
-      waitTime: ${{ inputs.usernameInput }}
+    steps:
+      - uses: ./.github/workflows/CreatePackageVersion.yml
+        with:
+          runApexTest: ${{ inputs.runApexTestInput }}
+          skipValidation: ${{ inputs.skipValidationInput }}
+          packageName: ${{ inputs.packageNameInput }}
+          waitTime: ${{ inputs.usernameInput }}
