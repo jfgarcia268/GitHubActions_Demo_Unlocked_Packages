@@ -6,21 +6,29 @@ on:
   workflow_dispatch:
     inputs:
       runApexTest:
-        description: 'Run Apex Code Coverage'     
+        type: choice
+        description: 'Run Apex Code Coverage'  
+        options: 
+        - true
+        - false  
         required: true
-        default: 'false'
+        default: 'true'
       skipValidation:
+        type: choice
         description: 'Skip Package Validation'     
+        options: 
+        - true
+        - false  
         required: true
-        default: 'false'   
+        default: 'false'  
       packageName:
-        description: 'Package Name'     
+        type: choice
+        description: Package Name
         required: true
-        default: 'BuyHandset'
-      sourceFolder:
-        description: 'Source Folder Name'     
-        required: true
-        default: 'force-app'  
+        options: 
+        - app1
+        - app2
+        - core
       waitTime:
         description: 'Wait time to create Package'     
         required: true
@@ -30,7 +38,7 @@ jobs:
   createVersion:
     runs-on: ubuntu-latest
     container:
-      image: jfgarcia268/sfdx_vlocity_java:latest
+      image: jfgarcia268/vlocity_sfdx:latest
     steps:  
     - uses: actions/checkout@v2
       with:
@@ -40,12 +48,11 @@ jobs:
         RUN_APEX_TESTS: ${{ github.event.inputs.runApexTest }}
         SKIP_VALIDATION: ${{ github.event.inputs.skipValidation }}  
         PACKAGE_NAME: ${{ github.event.inputs.packageName }}  
-        SOURCE_FOLDER: ${{ github.event.inputs.sourceFolder }}
         WAIT: ${{ github.event.inputs.waitTime }}  
       run: |
         echo ${{ secrets.SFDX_URL_DEVHUB }}  > env.sfdx
         sfdx force:auth:sfdxurl:store -d -a ALIAS -f env.sfdx
-        COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d ${SOURCE_FOLDER} -k ${{ secrets.KEY }} --wait ${WAIT} -v ALIAS"      
+        COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.KEY }} --wait ${WAIT} -v ALIAS"      
         if ${RUN_APEX_TESTS}; then
           echo "Adding Code Coverage" 
           COMMAND="${COMMAND} --codecoverage " 
