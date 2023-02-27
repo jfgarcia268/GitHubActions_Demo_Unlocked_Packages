@@ -5,16 +5,16 @@ on:
     branches: [core, app1, app2]  
 
 jobs:
-  createVersion:
-    - name: Get branch name
+  getBranchName:
+      - name: Get branch name
       id: branch-name
       uses: tj-actions/branch-names@v5.2
-    - name: Call Create Package Version
+  createVersion:
       uses: ./.github/workflows/CreatePackageVersion.yml
       with:
         runApexTest: 'true'
         skipValidation: 'false'
-        packageName: ${{ steps.branch-name.outputs.current_branch }} 
+        packageName: ${{ jobs.getBranchName.steps.branch-name.outputs.current_branch }} 
         waitTime: 1000
       secrets:
         DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
