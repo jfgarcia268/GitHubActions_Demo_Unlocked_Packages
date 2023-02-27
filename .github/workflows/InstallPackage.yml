@@ -47,7 +47,7 @@ jobs:
       run: |
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
-          rm rm PID.txt  
+          rm -rf PID.txt  
         fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
         PACKAGE_ID=$(cat PID.txt)
@@ -58,7 +58,7 @@ jobs:
       run: |
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
-          rm rm PID.txt  
+          rm -rf PID.txt  
         fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App1
         PACKAGE_ID=$(cat PID.txt)
@@ -69,7 +69,7 @@ jobs:
       run: |
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
-          rm rm PID.txt  
+          rm -rf PID.txt  
         fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App2
         PACKAGE_ID=$(cat PID.txt)
