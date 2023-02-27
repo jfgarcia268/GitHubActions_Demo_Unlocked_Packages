@@ -43,7 +43,7 @@ jobs:
     - name: Login Scratch Org 
       run: |
         export HOME=/root
-        sfdx vlocityestools:auth:login --alias SO_ALIAS --password ${{ github.event.inputs.sopasword }} --username ${{ github.event.inputs.sousername }} --url ${{ github.event.inputs.sourl }}
+        sfdx vlocityestools:auth:login --alias SO_ALIAS -p ${{ github.event.inputs.sopasword }} -u ${{ github.event.inputs.sousername }} --url ${{ github.event.inputs.sourl }}
     - name: Core - Install Salesforce Package
       run: |
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
