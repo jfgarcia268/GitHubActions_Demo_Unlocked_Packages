@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Call Package Version Create Action
         id: local-action
-        uses: actions/CreatePackageVersion@v1
+        uses: ./.github/actions/CreatePackageVersion
         with:
           runApexTest: ${{ inputs.runApexTestInput }}
           skipValidation: ${{ inputs.skipValidationInput }}
