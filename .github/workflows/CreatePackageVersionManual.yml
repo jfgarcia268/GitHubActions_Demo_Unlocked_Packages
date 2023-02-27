@@ -3,7 +3,7 @@ name: Create Package Version Manual
 on:
   workflow_dispatch:
     inputs:
-      runApexTest:
+      runApexTestInput:
         type: choice
         description: 'Run Apex Code Coverage'  
         options: 
@@ -11,7 +11,7 @@ on:
         - false  
         required: true
         default: 'true'
-      skipValidation:
+      skipValidationInput:
         type: choice
         description: 'Skip Package Validation'     
         options: 
@@ -19,7 +19,7 @@ on:
         - false  
         required: true
         default: 'false'  
-      packageName:
+      packageNameInput:
         type: choice
         description: Package Name
         required: true
@@ -28,7 +28,7 @@ on:
         - app1
         - app2
         - core
-      waitTime:
+      waitTimeInput:
         description: 'Wait time to create Package'     
         required: true
         default: 1000    
@@ -39,11 +39,7 @@ jobs:
     steps:
       - uses: ./.github/workflows/Base/CreatePackageVersion.yml
         with:
-          runApexTest: ${{ inputs.runApexTest }}
-          skipValidation: ${{ inputs.skipValidation }}
-          packageName: ${{ inputs.packageName }}
-          runApexTest: ${{ inputs.username }}
-          token: ${{ secrets.envPAT }}
-        secrets:
-          RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
-          DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
+          runApexTest: ${{ inputs.runApexTestInput }}
+          skipValidation: ${{ inputs.skipValidationInput }}
+          packageName: ${{ inputs.packageNameInput }}
+          runApexTest: ${{ inputs.usernameInput }}
