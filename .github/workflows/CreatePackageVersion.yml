@@ -22,9 +22,9 @@ inputs:
 createPackageVersion:
   using: "composite"
   steps:  
-#    - uses: actions/checkout@v2
-#      with:
-#        fetch-depth: 0
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Create Package Version 
       env:
         RUN_APEX_TESTS: ${{ github.event.inputs.runApexTest }}
