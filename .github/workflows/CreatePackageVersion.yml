@@ -31,8 +31,8 @@ on:
 jobs:
   createPackageVersion:
     runs-on: ubuntu-latest
-      container:
-        image: jfgarcia268/vlocity_sfdx:core
+    container:
+      image: jfgarcia268/vlocity_sfdx:core
     using: "composite"
     steps:  
       - uses: actions/checkout@v3
