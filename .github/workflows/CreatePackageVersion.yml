@@ -32,7 +32,7 @@ on:
         required: true
   workflow_dispatch:
     inputs:
-      runApexTestInput:
+      runApexTest:
         type: choice
         description: 'Run Apex Code Coverage'  
         options: 
@@ -40,7 +40,7 @@ on:
         - false  
         required: true
         default: 'true'
-      skipValidationInput:
+      skipValidation:
         type: choice
         description: 'Skip Package Validation'     
         options: 
@@ -48,7 +48,7 @@ on:
         - false  
         required: true
         default: 'false'  
-      packageNameInput:
+      packageName:
         type: choice
         description: Package Name
         required: true
@@ -57,7 +57,7 @@ on:
         - app1
         - app2
         - core
-      waitTimeInput:
+      waitTime:
         type: integer
         description: 'Wait time to create Package'     
         required: true
@@ -83,8 +83,8 @@ jobs:
           echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
           echo "RUN_APEX_TESTS: ${RUN_APEX_TESTS}"
           echo "SKIP_VALIDATION: ${SKIP_VALIDATION}"
-          echo "PACKAGE_NAME" ${PACKAGE_NAME}
-          echo "WAIT" ${WAIT}
+          echo "PACKAGE_NAME: ${PACKAGE_NAME}""
+          echo "WAIT: ${WAIT}""
           sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
           COMMAND="sfdx package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB"      
           if ${RUN_APEX_TESTS}; then
