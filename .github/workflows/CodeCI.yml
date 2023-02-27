@@ -25,47 +25,6 @@ jobs:
         DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
         RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
         PACKAGES_KEY: ${{ secrets.PACKAGES_KEY }}
-  CreateSO:
-    needs: CreateVersion
-    runs-on: ubuntu-latest
-    container:
-      image: jfgarcia268/vlocity_sfdx:core
-    steps:  
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Login DevHub
-      run: |
-          echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
-          sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-    - name: Create SO
-      id: create_so
-      run: |
-        sfdx force:org:create --definitionfile config/project-scratch-def.json -a ALIAS --durationdays 29 --target-dev-hub DEVHUB
-        sfdx force:user:password:generate --target-org ALIAS --target-dev-hub DEVHUB
-        if [ -f org.info ]; then
-          rm org.info  
-        fi
-        sfdx org:display --verbose --target-org ALIAS >> org.info
-        JSON_RESULT=$(fdx org:display --verbose --target-org ALIAS --json)
-        SO_SFDX_URL=$( jq -r  '.result.sfdxAuthUrl' <<< "${JSON_RESULT}" ) 
-        echo "SO_SFDX_URL=$(SO_SFDX_URL)\n" >> $GITHUB_OUTPUT
-    - uses: actions/upload-artifact@v3
-      with:
-        name: Org-Credentials
-        path: ./org.info  
-    outputs: 
-      sosfdxurl: ${{ steps.create_so.outputs.SO_SFDX_URL }} 
-  InstallPackages:
-    needs: CreateSO
-    uses: ./.github/workflows/InstallPackage.yml
-    with:
-      scratchOrgSFDXUrl: ${{ needs.CreateSO.outputs.sosfdxurl }}
-      packageName: ${{ needs.GetBranchName.outputs.branchName }}
-    secrets:
-      DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
-      RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
-      PACKAGES_KEY: ${{ secrets.PACKAGES_KEY }}
   CodeScan:
     needs: GetBranchName
     runs-on: ubuntu-latest
