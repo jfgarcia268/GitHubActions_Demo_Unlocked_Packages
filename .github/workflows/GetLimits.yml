@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  getDevHubLimits
+  getDevHubLimits:
     runs-on: ubuntu-latest
     container:
       image: jfgarcia268/vlocity_sfdx:core
