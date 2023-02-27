@@ -43,6 +43,9 @@ jobs:
     - name: Login Scratch Org 
       run: |
         export HOME=/root
+        echo sopasword: ${{ github.event.inputs.sopasword }}
+        echo sousername: ${{ github.event.inputs.sousername }}
+        echo sourl: ${{ github.event.inputs.sourl }}
         sfdx vlocityestools:auth:login --alias SO_ALIAS -p ${{ github.event.inputs.sopasword }} -u ${{ github.event.inputs.sousername }} --url ${{ github.event.inputs.sourl }}
     - name: Core - Install Salesforce Package
       run: |
