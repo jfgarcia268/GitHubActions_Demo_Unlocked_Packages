@@ -42,6 +42,7 @@ jobs:
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
     - name: Login Scratch Org 
       run: |
+        sfdx force:org:list
         export HOME=/root
         echo sopasword: ${{ inputs.sopasword }}
         echo sousername: ${{ inputs.sousername }}
