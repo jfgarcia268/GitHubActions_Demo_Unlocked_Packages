@@ -31,9 +31,6 @@ createPackageVersion:
       SKIP_VALIDATION: ${{ inputs.skipValidation }}  
       PACKAGE_NAME: ${{ inputs.packageName }}  
       WAIT: ${{ inputs.waitTime }}  
-      CLIENT_ID: ${{ inputs.DEVHUB_clientid }}  
-      PACKAGE_KEY: ${{ inputs.PACKAGES_KEY }}  
-      PRIVATE_KEY: ${{ inputs.RSA_PRIVATE_KEY }}  
     run: |
       echo Hello World
       sfdx force
