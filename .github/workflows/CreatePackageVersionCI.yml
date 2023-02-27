@@ -2,7 +2,7 @@ name: Create Package Version For CI
 
 on:
   push:
-    branches: [core, app1, app2]  
+    branches: [core, App1, App2]  
 
 jobs:
   getBranchName:
