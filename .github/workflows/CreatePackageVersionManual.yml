@@ -44,7 +44,7 @@ jobs:
         id: local-action
         uses: ./.github/actions/CreatePackageVersion
         with:
-          runApexTest: ${{ inputs.runApexTestInput }}
+          #runApexTest: ${{ inputs.runApexTestInput }}
           skipValidation: ${{ inputs.skipValidationInput }}
           packageName: ${{ inputs.packageNameInput }}
           waitTime: ${{ inputs.usernameInput }}
