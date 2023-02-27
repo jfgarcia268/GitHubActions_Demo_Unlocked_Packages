@@ -27,7 +27,7 @@ createPackageVersion:
 #        fetch-depth: 0
     - name: Create Package Version 
       env:
-        RUN_APEX_TESTS: ${{ inputs.runApexTest }}
+        RUN_APEX_TESTS: ${{ github.event.inputs.runApexTest }}
         SKIP_VALIDATION: ${{ inputs.skipValidation }}  
         PACKAGE_NAME: ${{ inputs.packageName }}  
         WAIT: ${{ inputs.waitTime }}  
