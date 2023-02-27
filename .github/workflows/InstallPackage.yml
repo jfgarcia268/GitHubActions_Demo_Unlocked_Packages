@@ -1,0 +1,71 @@
+name: Install Package
+
+on: 
+  workflow_call:
+    inputs:
+      packageName:
+        type: string
+        description: Package Name
+        required: true
+      scratchOrgSFDXUrl:
+        type: string
+        description: Scratch Org SFDX Url
+        required: true
+    secrets:
+      DEVHUB_clientid:
+        required: true
+      RSA_PRIVATE_KEY:
+        required: true
+      PACKAGES_KEY:
+        required: true
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: jfgarcia268/vlocity_sfdx:core
+    steps:  
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Login DevHub
+      run: |
+        echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
+        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
+    - name: Login Scratch Org 
+      run: |
+        echo ${{ github.event.inputs.scratchOrgSFDXUrl }}  > env.sfdx
+        sfdx force:auth:sfdxurl:store -d -a SO_ALIAS -f env.sfdx
+    - name: Core - Install Salesforce Package
+      run: |
+        #Get latest PackageVersion from DevHub and create file "PID.txt" with it
+        if [ -f rm PID.txt  ]; then
+          rm rm PID.txt  
+        fi
+        ./Get_Latest_Version_Package.sh DEVHUB core
+        PACKAGE_ID=$(cat PID.txt)
+        echo "PACKAGE_ID:${PACKAGE_ID}"
+        sfdx force:package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+    - name: App1 - Install Salesforce Package
+      if: ${{ github.event.inputs.packageName == 'App1' }} 
+      run: |
+        #Get latest PackageVersion from DevHub and create file "PID.txt" with it
+        if [ -f rm PID.txt  ]; then
+          rm rm PID.txt  
+        fi
+        ./Get_Latest_Version_Package.sh DEVHUB App1
+        PACKAGE_ID=$(cat PID.txt)
+        echo "PACKAGE_ID:${PACKAGE_ID}"
+        sfdx force:package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+    - name: App2 - Install Salesforce Package
+      if: ${{ github.event.inputs.packageName == 'App2' }} 
+      run: |
+        #Get latest PackageVersion from DevHub and create file "PID.txt" with it
+        if [ -f rm PID.txt  ]; then
+          rm rm PID.txt  
+        fi
+        ./Get_Latest_Version_Package.sh DEVHUB App2
+        PACKAGE_ID=$(cat PID.txt)
+        echo "PACKAGE_ID:${PACKAGE_ID}"
+        sfdx force:package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+
