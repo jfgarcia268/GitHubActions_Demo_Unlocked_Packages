@@ -16,17 +16,7 @@ inputs:
   waitTime:
     description: 'Wait time to create Package'     
     required: true
-    default: 1000  
-secrets:
-  clientid:
-    description: 'clientid'     
-    required: true  
-  package_key:
-    description: 'package_key'     
-    required: true  
-  private_key:
-    description: 'private_key'     
-    required: true   
+    default: 1000   
 
 
 createPackageVersion:
@@ -41,15 +31,15 @@ createPackageVersion:
       SKIP_VALIDATION: ${{ inputs.skipValidation }}  
       PACKAGE_NAME: ${{ inputs.packageName }}  
       WAIT: ${{ inputs.waitTime }}  
-      CLIENT_ID: ${{ inputs.clientid }}  
-      PACKAGE_KEY: ${{ inputs.package_key }}  
-      PRIVATE_KEY: ${{ inputs.private_key }}  
+      CLIENT_ID: ${{ inputs.DEVHUB_clientid }}  
+      PACKAGE_KEY: ${{ inputs.PACKAGES_KEY }}  
+      PRIVATE_KEY: ${{ inputs.RSA_PRIVATE_KEY }}  
     run: |
       echo Hello World
       sfdx force
-      echo ${PRIVATE_KEY} > server.key
-      sfdx auth:jwt:grant --clientid ${CLIENT_ID} --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-      COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${PACKAGE_KEY} --wait ${WAIT} -v DEVHUB"      
+      echo ${{ inputs.RSA_PRIVATE_KEY }}   > server.key
+      sfdx auth:jwt:grant --clientid ${{ inputs.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
+      COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ inputs.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB"      
       if ${RUN_APEX_TESTS}; then
         echo "Adding Code Coverage" 
         COMMAND="${COMMAND} --codecoverage " 

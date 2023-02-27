@@ -48,7 +48,3 @@ jobs:
           skipValidation: ${{ inputs.skipValidationInput }}
           packageName: ${{ inputs.packageNameInput }}
           waitTime: ${{ inputs.usernameInput }}
-          clientid: ${{ secrets.DEVHUB_clientid }}
-        secrets:
-          package_key: ${{ secrets.PACKAGES_KEY }}
-          private_key: ${{ secrets.RSA_PRIVATE_KEY }}
