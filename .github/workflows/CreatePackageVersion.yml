@@ -79,7 +79,7 @@ jobs:
           PACKAGE_NAME: ${{ inputs.packageName }}  
           WAIT: ${{ inputs.waitTime }}  
         run: |
-          echo "${{ secrets.RSA_PRIVATE_KEY }}""   > server.key
+          echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
           sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
           COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB"      
           if ${RUN_APEX_TESTS}; then
