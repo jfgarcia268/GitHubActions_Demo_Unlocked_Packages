@@ -1,4 +1,4 @@
-name: CI
+name: Create Test Scratch Org
 
 on:
   workflow_dispatch:
@@ -12,8 +12,7 @@ jobs:
         uses: tj-actions/branch-names@v6.4
     outputs: 
       branchName: ${{ steps.branch-name.outputs.current_branch }} 
-  CreateSO:
-    needs: CreateVersion
+  CreateScratchOrg:
     runs-on: ubuntu-latest
     container:
       image: jfgarcia268/vlocity_sfdx:core
@@ -25,7 +24,7 @@ jobs:
       run: |
           echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
           sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-    - name: Create SO
+    - name: Create Scratch Org
       id: create_so
       run: |
         sfdx force:org:create --definitionfile config/project-scratch-def.json -a ALIAS --durationdays 29 --target-dev-hub DEVHUB
