@@ -22,29 +22,29 @@ inputs:
 createPackageVersion:
   using: "composite"
   steps:  
-  - uses: actions/checkout@v2
-    with:
-      fetch-depth: 0
-  - name: Create Package Version 
-    env:
-      RUN_APEX_TESTS: ${{ inputs.runApexTest }}
-      SKIP_VALIDATION: ${{ inputs.skipValidation }}  
-      PACKAGE_NAME: ${{ inputs.packageName }}  
-      WAIT: ${{ inputs.waitTime }}  
-    run: |
-      echo Hello World
-      sfdx force
-      echo ${{ inputs.RSA_PRIVATE_KEY }}   > server.key
-      sfdx auth:jwt:grant --clientid ${{ inputs.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-      COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ inputs.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB"      
-      if ${RUN_APEX_TESTS}; then
-        echo "Adding Code Coverage" 
-        COMMAND="${COMMAND} --codecoverage " 
-      fi
-      if ${SKIP_VALIDATION}; then
-        echo "Adding Skip Validation" 
-        COMMAND="${COMMAND} --skipvalidation " 
-      fi
-      # Run sfdx force:package:version:create 
-      echo "COMMAND:${COMMAND}"
-      ${COMMAND}
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Create Package Version 
+      env:
+        RUN_APEX_TESTS: ${{ inputs.runApexTest }}
+        SKIP_VALIDATION: ${{ inputs.skipValidation }}  
+        PACKAGE_NAME: ${{ inputs.packageName }}  
+        WAIT: ${{ inputs.waitTime }}  
+      run: |
+        echo Hello World
+        sfdx force
+        echo ${{ secrets.RSA_PRIVATE_KEY }}   > server.key
+        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
+        COMMAND="sfdx force:package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB"      
+        if ${RUN_APEX_TESTS}; then
+          echo "Adding Code Coverage" 
+          COMMAND="${COMMAND} --codecoverage " 
+        fi
+        if ${SKIP_VALIDATION}; then
+          echo "Adding Skip Validation" 
+          COMMAND="${COMMAND} --skipvalidation " 
+        fi
+        # Run sfdx force:package:version:create 
+        echo "COMMAND:${COMMAND}"
+        ${COMMAND}
