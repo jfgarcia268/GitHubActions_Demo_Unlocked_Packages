@@ -43,10 +43,10 @@ jobs:
     outputs: 
       sosfdxurl: ${{ steps.create_so.outputs.SO_SFDX_URL }} 
   InstallPackages:
-    needs: CreateSO
+    needs: CreateScratchOrg
     uses: ./.github/workflows/InstallPackage.yml
     with:
-      scratchOrgSFDXUrl: ${{ needs.CreateSO.outputs.sosfdxurl }}
+      scratchOrgSFDXUrl: ${{ needs.CreateScratchOrg.outputs.sosfdxurl }}
       packageName: ${{ needs.GetBranchName.outputs.branchName }}
     secrets:
       DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
