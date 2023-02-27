@@ -26,10 +26,10 @@ createPackageVersion:
       fetch-depth: 0
   - name: Create Package Version 
     env:
-      RUN_APEX_TESTS: ${{ github.event.inputs.runApexTest }}
-      SKIP_VALIDATION: ${{ github.event.inputs.skipValidation }}  
-      PACKAGE_NAME: ${{ github.event.inputs.packageName }}  
-      WAIT: ${{ github.event.inputs.waitTime }}  
+      RUN_APEX_TESTS: ${{ inputs.runApexTest }}
+      SKIP_VALIDATION: ${{ inputs.skipValidation }}  
+      PACKAGE_NAME: ${{ inputs.packageName }}  
+      WAIT: ${{ inputs.waitTime }}  
     run: |
       echo Hello World
       sfdx force
