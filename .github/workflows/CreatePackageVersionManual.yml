@@ -35,6 +35,7 @@ on:
 
 jobs:
   createVersion:
+    runs-on: ubuntu-latest
     steps:
       - uses: ./.github/workflows/CreatePackageVersion.yml
         with:

@@ -26,7 +26,7 @@ on:
         default: 1000    
 
 jobs:
-  createVersion:
+  createVersionBase:
     runs-on: ubuntu-latest
     container:
       image: jfgarcia268/vlocity_sfdx:latest
