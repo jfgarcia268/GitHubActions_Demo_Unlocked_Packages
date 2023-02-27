@@ -89,7 +89,7 @@ jobs:
           COMMAND="sfdx package:version:create -p ${PACKAGE_NAME} -d "force-app-${PACKAGE_NAME}" -k ${{ secrets.PACKAGES_KEY }}  --wait ${WAIT} -v DEVHUB --verbose"      
           if ${RUN_APEX_TESTS}; then
             echo "Adding Code Coverage" 
-            COMMAND="${COMMAND} --codecoverage " 
+            COMMAND="${COMMAND} --code-coverage " 
           fi
           if ${SKIP_VALIDATION}; then
             echo "Adding Skip Validation" 
