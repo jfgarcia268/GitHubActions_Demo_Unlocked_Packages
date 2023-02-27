@@ -30,6 +30,7 @@ secrets:
 
 
 createPackageVersion:
+  using: "composite"
   steps:  
   - uses: actions/checkout@v2
     with:
