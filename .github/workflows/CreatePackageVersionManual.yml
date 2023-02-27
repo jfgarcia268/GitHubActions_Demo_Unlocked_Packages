@@ -23,6 +23,7 @@ on:
         type: choice
         description: Package Name
         required: true
+        default: 'core'
         options: 
         - app1
         - app2
