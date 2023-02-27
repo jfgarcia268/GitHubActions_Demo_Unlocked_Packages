@@ -6,9 +6,11 @@ on:
 
 jobs:
   getBranchName:
+    runs-on: ubuntu-latest
+    steps:
       - name: Get branch name
-      id: branch-name
-      uses: tj-actions/branch-names@v5.2
+        id: branch-name
+        uses: tj-actions/branch-names@v5.2
   createVersion:
       uses: ./.github/workflows/CreatePackageVersion.yml
       with:
