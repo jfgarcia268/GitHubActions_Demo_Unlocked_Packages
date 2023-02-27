@@ -13,6 +13,7 @@ jobs:
     outputs: 
       branchName: ${{ steps.branch-name.outputs.current_branch }} 
   CreateScratchOrg:
+    needs: GetBranchName
     runs-on: ubuntu-latest
     container:
       image: jfgarcia268/vlocity_sfdx:core
