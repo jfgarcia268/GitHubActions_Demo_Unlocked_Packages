@@ -1,32 +1,25 @@
 name: Create Package Version
 
-on: 
-  workflow_dispatch:
+on:
+  workflow_call:
+    secrets:
+      RSA_PRIVATE_KEY:
+        required: true
+      DEVHUB_clientid:
+        required: true
     inputs:
       runApexTest:
-        type: choice
         description: 'Run Apex Code Coverage'  
-        options: 
-        - true
-        - false  
         required: true
         default: 'true'
       skipValidation:
-        type: choice
         description: 'Skip Package Validation'     
-        options: 
-        - true
-        - false  
         required: true
-        default: 'false'  
+        default: 'false' 
       packageName:
-        type: choice
         description: Package Name
         required: true
-        options: 
-        - app1
-        - app2
-        - core
+        default: 'core'
       waitTime:
         description: 'Wait time to create Package'     
         required: true
