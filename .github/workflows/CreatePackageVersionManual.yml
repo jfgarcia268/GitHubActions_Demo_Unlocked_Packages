@@ -37,7 +37,7 @@ jobs:
   createVersion:
     runs-on: ubuntu-latest
     container:
-      image: jfgarcia268/vlocity_sfdx:latest
+      image: jfgarcia268/vlocity_sfdx:core
     steps:
       - uses: actions/checkout@v2
       - name: Call Package Version Create Action
