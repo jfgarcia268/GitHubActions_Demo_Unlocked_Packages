@@ -27,6 +27,7 @@ PACKAGE2_ID=$(jq -r ".packageAliases.${PACKAGE_NAME}"  sfdx-project.json)
 
 echo "## Getting Latest Build Number for Package: $PACKAGE_NAME ($PACKAGE2_ID) "
 QUERY="SELECT BuildNumber, SubscriberPackageVersionId FROM Package2Version WHERE MajorVersion=${MAYOR_VERSION} AND MinorVersion=${MINOR_VERSION} AND PatchVersion=${PATCH_VERSION} AND Package2Id='${PACKAGE2_ID}' ORDER BY BuildNumber DESC LIMIT 1"
+echo "QUERY: ${QUERY}"
 RESULT=$(sfdx data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY" )
 BUILD_NUMBER=$(jq -r .result.records[0].BuildNumber <<< "$RESULT")
 PACKAGE_ID=$(jq -r .result.records[0].SubscriberPackageVersionId <<< "$RESULT")
