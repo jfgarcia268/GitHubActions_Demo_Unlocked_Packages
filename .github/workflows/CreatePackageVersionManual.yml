@@ -35,7 +35,8 @@ on:
 
 jobs:
   createVersion:
-    uses: ./.github/actions/CreatePackageVersion.yml
+    uses: ./.github/workflows/CreatePackageVersion.yml
+    name: Create Package Version Manual
     with:
       runApexTest: ${{ inputs.runApexTestInput }}
       skipValidation: ${{ inputs.skipValidationInput }}
