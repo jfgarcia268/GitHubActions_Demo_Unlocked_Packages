@@ -34,9 +34,11 @@ jobs:
           rm org.info  
         fi
         sfdx org:display --target-org ALIAS --verbose  >> org.info
+        cat org.info
         sfdx org:display --target-org ALIAS --verbose --json >> credential.json
         SO_SFDX_URL=$( jq -r  '.result.sfdxAuthUrl' credential.json) 
-        echo "SO_SFDX_URL=$(SO_SFDX_URL)\n" >> $GITHUB_OUTPUT
+        echo "SO_SFDX_URL:${SO_SFDX_URL}"
+        echo "SO_SFDX_URL=${SO_SFDX_URL}\n" >> $GITHUB_OUTPUT
     - uses: actions/upload-artifact@v3
       with:
         name: Org-Credentials
