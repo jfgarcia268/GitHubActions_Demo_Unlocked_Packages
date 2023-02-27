@@ -42,6 +42,7 @@ jobs:
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
     - name: Login Scratch Org 
       run: |
+        export HOME=/root
         sfdx vlocityestools:auth:login --alias SO_ALIAS --password ${{ github.event.inputs.sopasword }} --username ${{ github.event.inputs.sousername }} --url ${{ github.event.inputs.sourl }}
     - name: Core - Install Salesforce Package
       run: |
@@ -52,7 +53,7 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
         PACKAGE_ID=$(cat PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx force:package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
     - name: App1 - Install Salesforce Package
       if: ${{ github.event.inputs.packageName == 'App1' }} 
       run: |
@@ -63,7 +64,7 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App1
         PACKAGE_ID=$(cat PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx force:package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
     - name: App2 - Install Salesforce Package
       if: ${{ github.event.inputs.packageName == 'App2' }} 
       run: |
@@ -74,5 +75,5 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App2
         PACKAGE_ID=$(cat PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx force:package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
 
