@@ -41,13 +41,13 @@ jobs:
     - name: Create SO
       id: create_so
       run: |
-        sfdx force:org:create --definitionfile config/project-scratch-def.json -a ALIAS --durationdays 29 --targetdevhubusername DEVHUB
-        sfdx force:user:password:generate --targetusername ALIAS --targetdevhubusername DEVHUB
+        sfdx force:org:create --definitionfile config/project-scratch-def.json -a ALIAS --durationdays 29 --target-dev-hub DEVHUB
+        sfdx force:user:password:generate --target-org ALIAS --target-dev-hub DEVHUB
         if [ -f org.info ]; then
           rm org.info  
         fi
-        sfdx force:org:display --verbose --targetusername ALIAS  --verbose >> org.info
-        JSON_RESULT=$(sfdx force:org:display --target-org DevPackages --verbose --json)
+        sfdx org:display --verbose --target-org ALIAS >> org.info
+        JSON_RESULT=$(fdx org:display --verbose --target-org ALIAS --json)
         SO_SFDX_URL=$( jq -r  '.result.sfdxAuthUrl' <<< "${JSON_RESULT}" ) 
         echo "SO_SFDX_URL=$(SO_SFDX_URL)\n" >> $GITHUB_OUTPUT
     - uses: actions/upload-artifact@v3
