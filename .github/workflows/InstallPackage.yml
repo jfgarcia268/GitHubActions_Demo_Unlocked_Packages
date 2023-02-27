@@ -7,10 +7,18 @@ on:
         type: string
         description: Package Name
         required: true
-      scratchOrgSFDXUrl:
+      sousername:
         type: string
-        description: Scratch Org SFDX Url
+        description: Scratch Org User Name
         required: true
+      sopasword:
+        type: string
+        description: Scratch Org Password
+        required: true
+      sourl:
+        type: string
+        description: Scratch Org URL
+        required: true  
     secrets:
       DEVHUB_clientid:
         required: true
@@ -34,8 +42,7 @@ jobs:
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
     - name: Login Scratch Org 
       run: |
-        echo ${{ github.event.inputs.scratchOrgSFDXUrl }}  > env.sfdx
-        sfdx force:auth:sfdxurl:store -d -a SO_ALIAS -f env.sfdx
+        sfdx vlocityestools:auth:login --alias SO_ALIAS --password ${{ github.event.inputs.sopasword }} --username ${{ github.event.inputs.sousername }} --url ${{ github.event.inputs.sourl }}
     - name: Core - Install Salesforce Package
       run: |
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it

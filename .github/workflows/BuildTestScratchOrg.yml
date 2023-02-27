@@ -34,22 +34,28 @@ jobs:
           rm org.info  
         fi
         sfdx org:display --target-org ALIAS --verbose  >> org.info
-        cat org.info
         sfdx org:display --target-org ALIAS --verbose --json >> credential.json
-        SO_SFDX_URL=$( jq -r  '.result.sfdxAuthUrl' credential.json) 
-        echo "SO_SFDX_URL:${SO_SFDX_URL}"
-        echo "SO_SFDX_URL=${SO_SFDX_URL}\n" >> $GITHUB_OUTPUT
+        SO_Password=$( jq -r  '.result.password' credential.json) 
+        SO_User_Name=$( jq -r  '.result.username' credential.json) 
+        SO_URL=$( jq -r  '.result.instanceUrl' credential.json) 
+        echo "SO_Password=${SO_Password}\n" >> $GITHUB_OUTPUT
+        echo "SO_User_Name=${SO_User_Name}\n" >> $GITHUB_OUTPUT
+        echo "SO_URL=${SO_URL}\n" >> $GITHUB_OUTPUT
     - uses: actions/upload-artifact@v3
       with:
         name: Org-Credentials
         path: ./org.info  
     outputs: 
-      sosfdxurl: ${{ steps.create_so.outputs.SO_SFDX_URL }} 
+      sopasword: ${{ steps.create_so.outputs.SO_Password }} 
+      sousername: ${{ steps.create_so.outputs.SO_User_Name }} 
+      sourl: ${{ steps.create_so.outputs.SO_URL }} 
   InstallPackages:
     needs: CreateScratchOrg
     uses: ./.github/workflows/InstallPackage.yml
     with:
-      scratchOrgSFDXUrl: ${{ needs.CreateScratchOrg.outputs.sosfdxurl }}
+      sopasword: ${{ needs.CreateScratchOrg.outputs.sopasword }}
+      sousername: ${{ needs.CreateScratchOrg.outputs.sousername }}
+      sourl: ${{ needs.CreateScratchOrg.outputs.sourl }}
       packageName: ${{ needs.GetBranchName.outputs.branchName }}
     secrets:
       DEVHUB_clientid: ${{ secrets.DEVHUB_clientid }}
