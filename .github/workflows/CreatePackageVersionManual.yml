@@ -39,10 +39,10 @@ jobs:
     container:
       image: jfgarcia268/vlocity_sfdx:core
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Call Package Version Create Action
         id: local-action
-        uses: ./.github/actions/CreatePackageVersion
+        uses: actions/CreatePackageVersion@v1
         with:
           runApexTest: ${{ inputs.runApexTestInput }}
           skipValidation: ${{ inputs.skipValidationInput }}
