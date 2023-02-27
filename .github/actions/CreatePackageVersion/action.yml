@@ -35,13 +35,13 @@ createPackageVersion:
       fetch-depth: 0
   - name: Create Package Version 
     env:
-      RUN_APEX_TESTS: ${{ inputs.runApexTest }}
-      SKIP_VALIDATION: ${{ inputs.skipValidation }}  
-      PACKAGE_NAME: ${{ inputs.packageName }}  
-      WAIT: ${{ inputs.waitTime }}  
-      CLIENT_ID: ${{ inputs.clientid }}  
-      PACKAGE_KEY: ${{ inputs.package_key }}  
-      PRIVATE_KEY: ${{ inputs.private_key }}  
+      RUN_APEX_TESTS: ${{ github.event.inputs.runApexTest }}
+      SKIP_VALIDATION: ${{ github.event.inputs.skipValidation }}  
+      PACKAGE_NAME: ${{ github.event.inputs.packageName }}  
+      WAIT: ${{ github.event.inputs.waitTime }}  
+      CLIENT_ID: ${{ github.event.inputs.clientid }}  
+      PACKAGE_KEY: ${{ github.event.inputs.package_key }}  
+      PRIVATE_KEY: ${{ github.event.inputs.private_key }}  
     run: |
       echo Hello World
       sfdx force
