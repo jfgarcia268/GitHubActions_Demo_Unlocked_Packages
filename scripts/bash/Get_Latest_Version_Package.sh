@@ -16,7 +16,8 @@ do
 	PACKAGE=$(jq -r ".packageDirectories[${i}].package" sfdx-project.json)
 	#echo "$PACKAGE - $PACKAGE_NAME"
 	if [ "$PACKAGE" == "$PACKAGE_NAME" ]; then
-		VERSION=$(jq -r .packageDirectories[0].versionNumber sfdx-project.json)
+		VERSION=$(jq -r .packageDirectories[${i}].versionNumber sfdx-project.json)
+		echo "VERSION: ${VERSION}"
 		# "versionNumber": "0.1.0.NEXT",
 		delimiter="."
 		s=$VERSION$delimiter
