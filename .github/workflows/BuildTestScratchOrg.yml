@@ -42,7 +42,7 @@ jobs:
         echo "SO_User_Name=${SO_User_Name}\n" >> $GITHUB_OUTPUT
         echo "SO_URL=${SO_URL}\n" >> $GITHUB_OUTPUT
         echo "GITHUB_OUTPUT:"
-        echo "$GITHUB_OUTPUT"
+        cat "$GITHUB_OUTPUT"
     - uses: actions/upload-artifact@v3
       with:
         name: Org-Credentials
