@@ -31,7 +31,6 @@ on:
         description: 'Order By'  
         options: 
         - 'CreatedDate'
-        - 'CreatedDate'
         - 'Package2.Name'
         required: true
         default: 'CreatedDate desc'
