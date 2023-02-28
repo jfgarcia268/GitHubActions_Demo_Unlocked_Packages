@@ -44,6 +44,9 @@ jobs:
       run: |
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
+        echo "/////"
+        echo ${{ inputs.packageName }} 
+        echo "/////"
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
           rm -rf PID.txt  
@@ -57,9 +60,6 @@ jobs:
       run: |
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
-        echo "/////"
-        echo ${{ inputs.packageName }} 
-        echo "/////"
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
           rm -rf PID.txt  
