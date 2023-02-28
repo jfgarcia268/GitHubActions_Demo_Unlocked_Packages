@@ -18,7 +18,7 @@ jobs:
         echo "### Login DevHub"
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
         echo "### Login UAT"
-        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ secrets.UAT_SANDBOX_USERNAME }} --instanceurl https://test.salesforce.com --setalias UAT
+        sfdx auth:jwt:grant --clientid ${{ secrets.UAT_CLIENTID }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259.uat --instanceurl https://test.salesforce.com --setalias UAT
         sfdx org:list
     - name: Core - Install Salesforce Package
       run: |
