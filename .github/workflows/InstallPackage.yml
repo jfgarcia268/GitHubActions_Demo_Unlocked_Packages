@@ -31,7 +31,7 @@ jobs:
   InstallPackages:
     runs-on: ubuntu-latest
     container:
-      image: jfgarcia268/vlocity_sfdx:latest
+      image: jfgarcia268/vlocity_sfdx:core
     steps:  
     - uses: actions/checkout@v3
       with:
@@ -40,16 +40,6 @@ jobs:
       run: |
         echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-    - name: Login Scratch Org 
-      run: |
-        sfdx force:org:list
-        export HOME=/root
-        echo sopasword: ${{ inputs.sopasword }}
-        echo sousername: ${{ inputs.sousername }}
-        echo sourl: ${{ inputs.sourl }}
-        #sfdx vlocityestools:auth:login --alias SO_ALIAS -p ${{ inputs.sopasword }} -u ${{ inputs.sousername }} --url ${{ inputs.sourl }}
-        ls -la
-        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
     - name: Core - Install Salesforce Package
       run: |
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
@@ -65,7 +55,11 @@ jobs:
     - name: App1 - Install Salesforce Package
       if: ${{ inputs.packageName == 'App1' }} 
       run: |
+        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
+        echo "/////"
+        echo ${{ inputs.packageName }} 
+        echo "/////"
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
           rm -rf PID.txt  
@@ -77,6 +71,7 @@ jobs:
     - name: App2 - Install Salesforce Package
       if: ${{ inputs.packageName == 'App2' }} 
       run: |
+        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
