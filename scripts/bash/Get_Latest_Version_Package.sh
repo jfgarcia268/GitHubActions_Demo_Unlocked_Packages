@@ -44,8 +44,6 @@ RESULT=$(sfdx force:data:soql:query --json --use-tooling-api --target-org="$DEVH
 BUILD_NUMBER=$(jq -r .result.records[0].BuildNumber <<< "$RESULT")
 PACKAGE_ID=$(jq -r .result.records[0].SubscriberPackageVersionId <<< "$RESULT")
 
-ls -la
-
 if [ "$BUILD_NUMBER" != null ]; then
 	NEW_VERSION="${MAYOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}"
 	echo "## Recent Build Number found:${BUILD_NUMBER}  New Version: ${NEW_VERSION}  Package ID: $PACKAGE_ID"
