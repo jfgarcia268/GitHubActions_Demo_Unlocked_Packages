@@ -1,4 +1,4 @@
-name: Get DevHub Limits
+name: Get Packages List
 
 on:
   workflow_dispatch:
