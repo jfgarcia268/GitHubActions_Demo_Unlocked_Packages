@@ -49,9 +49,10 @@ jobs:
         echo sourl: ${{ inputs.sourl }}
         #sfdx vlocityestools:auth:login --alias SO_ALIAS -p ${{ inputs.sopasword }} -u ${{ inputs.sousername }} --url ${{ inputs.sourl }}
         ls -la
-        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl https://test.salesforce.com --setalias SO_ALIAS
+        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
     - name: Core - Install Salesforce Package
       run: |
+        sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
