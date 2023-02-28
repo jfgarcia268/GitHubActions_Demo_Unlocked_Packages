@@ -51,6 +51,8 @@ jobs:
         echo "PACKAGE_IS_RELEASED_CORE=${PACKAGE_IS_RELEASED_CORE}\n" >> $GITHUB_OUTPUT
         echo "PACKAGE_IS_RELEASED_App1=${PACKAGE_IS_RELEASED_App1}\n" >> $GITHUB_OUTPUT
         echo "PACKAGE_IS_RELEASED_App2=${PACKAGE_IS_RELEASED_App2}\n" >> $GITHUB_OUTPUT
+        echo GITHUB_OUTPUT:
+        cat $GITHUB_OUTPUT
     - name: Promote Core
       if: ${{ steps.get_packages_id.outputs.PACKAGE_IS_RELEASED_CORE == 'false' }} 
       run: |
