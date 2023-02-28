@@ -11,10 +11,6 @@ on:
         type: string
         description: Scratch Org User Name
         required: true
-      sopasword:
-        type: string
-        description: Scratch Org Password
-        required: true
       sourl:
         type: string
         description: Scratch Org URL
@@ -48,7 +44,7 @@ jobs:
         echo ${{ inputs.packageName }} 
         echo "/////"
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
-        if [ -f rm PID.txt  ]; then
+        if [ -f PID.txt  ]; then
           rm -rf PID.txt  
         fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
@@ -61,7 +57,7 @@ jobs:
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
-        if [ -f rm PID.txt  ]; then
+        if [ -f PID.txt  ]; then
           rm -rf PID.txt  
         fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App1
@@ -74,7 +70,7 @@ jobs:
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
-        if [ -f rm PID.txt  ]; then
+        if [ -f PID.txt  ]; then
           rm -rf PID.txt  
         fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App2

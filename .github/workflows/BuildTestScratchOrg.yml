@@ -38,7 +38,6 @@ jobs:
         SO_Password=$( jq -r  '.result.password' credential.json) 
         SO_User_Name=$( jq -r  '.result.username' credential.json) 
         SO_URL=$( jq -r  '.result.instanceUrl' credential.json) 
-        echo "SO_Password=${SO_Password}\n" >> $GITHUB_OUTPUT
         echo "SO_User_Name=${SO_User_Name}\n" >> $GITHUB_OUTPUT
         echo "SO_URL=${SO_URL}\n" >> $GITHUB_OUTPUT
         echo "GITHUB_OUTPUT:"
@@ -48,14 +47,14 @@ jobs:
         name: Org-Credentials
         path: ./org.info  
     outputs: 
-      sopasword: ${{ steps.create_so.outputs.SO_Password }} 
       sousername: ${{ steps.create_so.outputs.SO_User_Name }} 
       sourl: ${{ steps.create_so.outputs.SO_URL }} 
   InstallPackages:
-    needs: CreateScratchOrg
+    needs: 
+     - CreateScratchOrg
+     - GetBranchName
     uses: ./.github/workflows/InstallPackage.yml
     with:
-      sopasword: ${{ needs.CreateScratchOrg.outputs.sopasword }}
       sousername: ${{ needs.CreateScratchOrg.outputs.sousername }}
       sourl: ${{ needs.CreateScratchOrg.outputs.sourl }}
       packageName: ${{ needs.GetBranchName.outputs.branchName }}
