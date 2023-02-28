@@ -73,7 +73,7 @@ jobs:
           # Run sfdx package:version:list 
           echo "COMMAND:${COMMAND}"
           ${COMMAND} >> PackagesList.txt
-    - uses: actions/upload-artifact@v3
-      with:
-        name: PackagesList
-        path: ./PackagesList.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: PackagesList
+          path: ./PackagesList.txt
