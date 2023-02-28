@@ -20,7 +20,8 @@ jobs:
       run: |
         echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-    - name: Core - Install Salesforce Package
+    - name: Get Latest Package Version
+      id: get_packages_id
       run: |
         echo "### Get latest PackageVersion For core"
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
@@ -37,21 +38,54 @@ jobs:
         PACKAGE_ID_App2=$(cat App2_PID.txt)
         echo "PACKAGE_ID_App2:${PACKAGE_ID_App2}"
 
-        echo "### Promoting Packages"
-        echo "# Promoting Core - PACKAGE_ID_CORE: ${PACKAGE_ID_CORE}"
-        sfdx package:version:promote --noprompt --package ${PACKAGE_ID_CORE} --target-hub-org DEVHUB
-        echo "# Promoting App1 - PACKAGE_ID_App1: ${PACKAGE_ID_App1}"
-        sfdx package:version:promote --noprompt --package ${PACKAGE_ID_App1} --target-hub-org DEVHUB
-        echo "# Promoting App2 - PACKAGE_ID_App2: ${PACKAGE_ID_App2}"
-        sfdx package:version:promote --noprompt --package ${PACKAGE_ID_App2} --target-hub-org DEVHUB
+        echo "PACKAGE_ID_CORE=${PACKAGE_ID_CORE}\n" >> $GITHUB_OUTPUT
+        echo "PACKAGE_ID_App1=${PACKAGE_ID_App1}\n" >> $GITHUB_OUTPUT
+        echo "PACKAGE_ID_App2=${PACKAGE_ID_App2}\n" >> $GITHUB_OUTPUT
+    - name: Promoting Package
+      id: promote_packages
+      run: |
+        QUERY_CORE="SELECT IsReleased FROM Package2Version WHERE SubscriberPackageVersionId = '${{ steps.get_packages_id.outputs.PACKAGE_ID_CORE }} ' LIMIT 1"
+        echo "QUERY_CORE: ${QUERY_CORE}"
+        RESULT=$(sfdx force:data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY_CORE" )
+        echo "RESULT: ${RESULT}"
+        IS_RELEASED_CORE=$(jq -r .result.records[0].IsReleased <<< "$RESULT")
+        echo "IS_RELEASED_CORE=${IS_RELEASED_CORE}\n" >> $GITHUB_OUTPUT
 
-        echo "### Installing Packages"
-        echo "# Installing Core - PACKAGE_ID_CORE: ${PACKAGE_ID_CORE}"
-        sfdx package:install --package ${PACKAGE_ID} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
-        echo "# Installing App1 - PACKAGE_ID_App1: ${PACKAGE_ID_App1}"
-        sfdx package:install --package ${PACKAGE_ID_App1} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
-        echo "# Installing App2 - PACKAGE_ID_App2: ${PACKAGE_ID_App2}"
-        sfdx package:install --package ${PACKAGE_ID_App2} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+        QUERY_APP1="SELECT IsReleased FROM Package2Version WHERE SubscriberPackageVersionId = '${{ steps.get_packages_id.outputs.PACKAGE_ID_App1 }} ' LIMIT 1"
+        echo "QUERY_APP1: ${QUERY_APP1}"
+        RESULT=$(sfdx force:data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY_APP1" )
+        echo "RESULT: ${RESULT}"
+        IS_RELEASED_APP1=$(jq -r .result.records[0].IsReleased <<< "$RESULT")
+        echo "IS_RELEASED_APP1=${IS_RELEASED_APP1}\n" >> $GITHUB_OUTPUT
+
+        QUERY_APP2="SELECT IsReleased FROM Package2Version WHERE SubscriberPackageVersionId = '${{ steps.get_packages_id.outputs.PACKAGE_ID_App2 }} ' LIMIT 1"
+        echo "QUERY_APP2: ${QUERY_APP2}"
+        RESULT=$(sfdx force:data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY_APP2" )
+        echo "RESULT: ${RESULT}"
+        IS_RELEASED_APP2=$(jq -r .result.records[0].IsReleased <<< "$RESULT")
+        echo "IS_RELEASED_APP2=${IS_RELEASED_APP2}\n" >> $GITHUB_OUTPUT
+
+        echo "### Is Promote Results:"
+        echo "IS_RELEASED_CORE: ${IS_RELEASED_CORE}"
+        echo "IS_RELEASED_APP1: ${IS_RELEASED_APP1}"
+        echo "IS_RELEASED_APP2: ${IS_RELEASED_APP2}"
+
+#        echo "### Promoting Packages"
+#        echo "# Promoting Core - PACKAGE_ID_CORE: ${PACKAGE_ID_CORE}"
+#        sfdx package:version:promote --noprompt --package ${PACKAGE_ID_CORE} --target-hub-org DEVHUB
+#        echo "# Promoting App1 - PACKAGE_ID_App1: ${PACKAGE_ID_App1}"
+#        sfdx package:version:promote --noprompt --package ${PACKAGE_ID_App1} --target-hub-org DEVHUB
+#        echo "# Promoting App2 - PACKAGE_ID_App2: ${PACKAGE_ID_App2}"
+#        sfdx package:version:promote --noprompt --package ${PACKAGE_ID_App2} --target-hub-org DEVHUB
+#    - name: Installing Package
+#      run: |
+#        echo "### Installing Packages"
+#        echo "# Installing Core - PACKAGE_ID_CORE: ${PACKAGE_ID_CORE}"
+#        sfdx package:install --package ${PACKAGE_ID} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+#        echo "# Installing App1 - PACKAGE_ID_App1: ${PACKAGE_ID_App1}"
+#        sfdx package:install --package ${PACKAGE_ID_App1} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+#        echo "# Installing App2 - PACKAGE_ID_App2: ${PACKAGE_ID_App2}"
+#        sfdx package:install --package ${PACKAGE_ID_App2} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
 
 
 
