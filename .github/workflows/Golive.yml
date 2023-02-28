@@ -78,7 +78,7 @@ jobs:
         PACKAGE_ID_App2=${{ steps.get_packages_id.outputs.PACKAGE_ID_App2 }} 
         echo "### Installing Packages"
         echo "# Installing Core - PACKAGE_ID_CORE: ${PACKAGE_ID_CORE}"
-        sfdx package:install --package ${PACKAGE_ID} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID_CORE} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
         echo "# Installing App1 - PACKAGE_ID_App1: ${PACKAGE_ID_App1}"
         sfdx package:install --package ${PACKAGE_ID_App1} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
         echo "# Installing App2 - PACKAGE_ID_App2: ${PACKAGE_ID_App2}"
