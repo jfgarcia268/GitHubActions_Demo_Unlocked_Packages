@@ -43,7 +43,7 @@ jobs:
     container:
       image: jfgarcia268/vlocity_sfdx:core
     steps:  
-      - name: Get DevHub Limits
+      - name: Get Packages List
         env:
           VERBOSE: ${{ inputs.verbose }}
           CREATED_LAST_DAYS: ${{ inputs.createdLastDays }}  
@@ -53,7 +53,7 @@ jobs:
           echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
           sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
 
-          COMMAND="sfdx package:version:list --target-hub-org DEVHUB --order-by '${ORDER_BY}' "     
+          COMMAND="sfdx package:version:list --target-hub-org DEVHUB --order-by \"${ORDER_BY}\" "     
 
           if ${VERBOSE}; then
             echo "Adding --verbose" 
