@@ -30,8 +30,8 @@ on:
         type: choice
         description: 'Order By'  
         options: 
-        - 'CreatedDate desc'
-        - 'CreatedDate asc'
+        - 'CreatedDate'
+        - 'CreatedDate'
         - 'Package2.Name'
         required: true
         default: 'CreatedDate desc'
