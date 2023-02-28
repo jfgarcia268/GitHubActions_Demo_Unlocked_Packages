@@ -73,6 +73,9 @@ jobs:
         sfdx package:version:promote --noprompt --package ${PACKAGE_ID_App2} --target-hub-org DEVHUB       
     - name: Install Packages
       run: |
+        PACKAGE_ID_CORE=${{ steps.get_packages_id.outputs.PACKAGE_ID_CORE }} 
+        PACKAGE_ID_App1=${{ steps.get_packages_id.outputs.PACKAGE_ID_App1 }} 
+        PACKAGE_ID_App2=${{ steps.get_packages_id.outputs.PACKAGE_ID_App2 }} 
         echo "### Installing Packages"
         echo "# Installing Core - PACKAGE_ID_CORE: ${PACKAGE_ID_CORE}"
         sfdx package:install --package ${PACKAGE_ID} --target-org DEVHUB --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
