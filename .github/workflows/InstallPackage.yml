@@ -52,6 +52,7 @@ jobs:
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
     - name: Core - Install Salesforce Package
       run: |
+        sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
           rm -rf PID.txt  
@@ -59,10 +60,11 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
         PACKAGE_ID=$(cat PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --target-org SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
     - name: App1 - Install Salesforce Package
       if: ${{ inputs.packageName == 'App1' }} 
       run: |
+        sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
           rm -rf PID.txt  
@@ -70,10 +72,11 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App1
         PACKAGE_ID=$(cat PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --target-org SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
     - name: App2 - Install Salesforce Package
       if: ${{ inputs.packageName == 'App2' }} 
       run: |
+        sfdx org:list
         #Get latest PackageVersion from DevHub and create file "PID.txt" with it
         if [ -f rm PID.txt  ]; then
           rm -rf PID.txt  
@@ -81,5 +84,5 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App2
         PACKAGE_ID=$(cat PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx package:install --package ${PACKAGE_ID} --targetusername=SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --target-org SO_ALIAS --wait 1000 --publishwait 1000 --securitytype=AdminsOnly -k ${{ secrets.PACKAGES_KEY }}
 
