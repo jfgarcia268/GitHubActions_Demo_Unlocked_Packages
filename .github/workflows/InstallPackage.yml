@@ -40,15 +40,9 @@ jobs:
       run: |
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
-        echo "/////"
-        echo ${{ inputs.packageName }} 
-        echo "/////"
-        #Get latest PackageVersion from DevHub and create file "PID.txt" with it
-        if [ -f PID.txt  ]; then
-          rm -rf PID.txt  
-        fi
+        echo "Package Name: ${{ inputs.packageName }}"
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
-        PACKAGE_ID=$(cat PID.txt)
+        PACKAGE_ID=$(cat core_PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
         sfdx package:install --package ${PACKAGE_ID} --target-org SO_ALIAS --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
     - name: App1 - Install Salesforce Package
@@ -56,12 +50,8 @@ jobs:
       run: |
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
-        #Get latest PackageVersion from DevHub and create file "PID.txt" with it
-        if [ -f PID.txt  ]; then
-          rm -rf PID.txt  
-        fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App1
-        PACKAGE_ID=$(cat PID.txt)
+        PACKAGE_ID=$(cat App1_PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
         sfdx package:install --package ${PACKAGE_ID} --target-org SO_ALIAS --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
     - name: App2 - Install Salesforce Package
@@ -69,12 +59,8 @@ jobs:
       run: |
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username ${{ inputs.sousername }} --instanceurl ${{ inputs.sourl }} --setalias SO_ALIAS
         sfdx org:list
-        #Get latest PackageVersion from DevHub and create file "PID.txt" with it
-        if [ -f PID.txt  ]; then
-          rm -rf PID.txt  
-        fi
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App2
-        PACKAGE_ID=$(cat PID.txt)
+        PACKAGE_ID=$(cat App2_PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
         sfdx package:install --package ${PACKAGE_ID} --target-org SO_ALIAS --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
 

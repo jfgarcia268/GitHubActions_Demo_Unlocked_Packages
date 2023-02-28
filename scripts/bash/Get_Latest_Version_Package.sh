@@ -49,7 +49,7 @@ ls -la
 if [ "$BUILD_NUMBER" != null ]; then
 	NEW_VERSION="${MAYOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}"
 	echo "## Recent Build Number found:${BUILD_NUMBER}  New Version: ${NEW_VERSION}  Package ID: $PACKAGE_ID"
-	echo "$PACKAGE_ID" > PID.txt
+	echo "$PACKAGE_ID" > ${PACKAGE_NAME}"_PID.txt
 else
 	echo "No Records found for query, Result:"
 	echo "$RESULT"
