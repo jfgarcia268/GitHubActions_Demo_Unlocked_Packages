@@ -38,16 +38,18 @@ done
 PACKAGE2_ID=$(jq -r ".packageAliases.${PACKAGE_NAME}"  sfdx-project.json)
 
 echo "## Getting Latest Build Number for Package: $PACKAGE_NAME ($PACKAGE2_ID) "
-QUERY="SELECT BuildNumber, SubscriberPackageVersionId FROM Package2Version WHERE MajorVersion=${MAYOR_VERSION} AND MinorVersion=${MINOR_VERSION} AND PatchVersion=${PATCH_VERSION} AND Package2Id='${PACKAGE2_ID}' ORDER BY BuildNumber DESC LIMIT 1"
+QUERY="SELECT BuildNumber, SubscriberPackageVersionId, IsReleased FROM Package2Version WHERE MajorVersion=${MAYOR_VERSION} AND MinorVersion=${MINOR_VERSION} AND PatchVersion=${PATCH_VERSION} AND Package2Id='${PACKAGE2_ID}' ORDER BY BuildNumber DESC LIMIT 1"
 echo "QUERY: ${QUERY}"
 RESULT=$(sfdx force:data:soql:query --json --use-tooling-api --target-org="$DEVHUB_URL" --query="$QUERY" )
 BUILD_NUMBER=$(jq -r .result.records[0].BuildNumber <<< "$RESULT")
 PACKAGE_ID=$(jq -r .result.records[0].SubscriberPackageVersionId <<< "$RESULT")
+PACKAGE_IS_RELEASED=$(jq -r .result.records[0].IsReleased <<< "$RESULT")
 
 if [ "$BUILD_NUMBER" != null ]; then
 	NEW_VERSION="${MAYOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}"
 	echo "## Recent Build Number found:${BUILD_NUMBER}  New Version: ${NEW_VERSION}  Package ID: $PACKAGE_ID"
 	echo "$PACKAGE_ID" > ${PACKAGE_NAME}_PID.txt
+	echo "$PACKAGE_IS_RELEASED" > ${PACKAGE_NAME}_IS_RELEASED.txt
 else
 	echo "No Records found for query, Result:"
 	echo "$RESULT"
