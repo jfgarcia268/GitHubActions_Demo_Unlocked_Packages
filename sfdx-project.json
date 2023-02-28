@@ -8,14 +8,14 @@
       "path": "force-app-App1",
       "package": "App1",
       "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
+      "versionNumber": "1.1.0.NEXT",
       "default": false,
       "versionDescription": "",
       "definitionFile": "config/project-scratch-def.json",
       "dependencies": [
         {
             "package": "core",
-            "versionNumber": "0.1.0.LATEST"
+            "versionNumber": "1.1.1.NEXT"
         }
       ]
     },
@@ -23,14 +23,14 @@
       "path": "force-app-App2",
       "package": "App2",
       "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
+      "versionNumber": "1.1.0.NEXT",
       "default": false,
       "versionDescription": "",
       "definitionFile": "config/project-scratch-def.json",
       "dependencies": [
         {
             "package": "core",
-            "versionNumber": "0.1.0.LATEST"
+            "versionNumber": "1.1.1.NEXT"
         }
       ]
     },
@@ -38,7 +38,7 @@
       "path": "force-app-core",
       "package": "core",
       "versionName": "ver 0.1",
-      "versionNumber": "0.1.1.NEXT",
+      "versionNumber": "1.1.1.NEXT",
       "default": false,
       "versionDescription": "",
       "definitionFile": "config/project-scratch-def.json"
