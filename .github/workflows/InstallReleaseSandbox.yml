@@ -2,6 +2,15 @@ name: Install Release To Sandbox
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: 'Target Org'  
+        options: 
+        - SIT
+        - UAT
+        required: true
+        default: SIT
 
 jobs:
   InstallPackages:
@@ -13,12 +22,14 @@ jobs:
       with:
         fetch-depth: 0
     - name: Login To Orgs
+      env:
+          ORG_NAME: ${{ inputs.environment }} 
       run: |
         echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
         echo "### Login DevHub"
         sfdx auth:jwt:grant --clientid ${{ secrets.DEVHUB_clientid }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259 --instanceurl https://login.salesforce.com --setalias DEVHUB
-        echo "### Login UAT"
-        sfdx auth:jwt:grant --clientid ${{ secrets.UAT_CLIENTID }}  --jwtkeyfile server.key --username demo.org@communications-b2c.1677243042259.uat --instanceurl https://test.salesforce.com --setalias UAT
+        echo "### Login To Org"
+        sfdx auth:jwt:grant --clientid ${{ secrets.[${ORG_NAME}]_CLIENTID }}  --jwtkeyfile server.key --username ${{ secrets.[${ORG_NAME}]_SANDBOX_USERNAME }} --instanceurl https://test.salesforce.com --setalias SANDBOX_ALIAS
         sfdx org:list
     - name: Core - Install Salesforce Package
       run: |
@@ -26,19 +37,19 @@ jobs:
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB core
         PACKAGE_ID=$(cat core_PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx package:install --package ${PACKAGE_ID} --target-org UAT --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --target-org SANDBOX_ALIAS --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
     - name: App1 - Install Salesforce Package
       run: |
         sfdx org:list
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App1
         PACKAGE_ID=$(cat App1_PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx package:install --package ${PACKAGE_ID} --target-org UAT --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --target-org SANDBOX_ALIAS --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
     - name: App2 - Install Salesforce Package
       run: |
         sfdx org:list
         ./scripts/bash/Get_Latest_Version_Package.sh DEVHUB App2
         PACKAGE_ID=$(cat App2_PID.txt)
         echo "PACKAGE_ID:${PACKAGE_ID}"
-        sfdx package:install --package ${PACKAGE_ID} --target-org UAT --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
+        sfdx package:install --package ${PACKAGE_ID} --target-org SANDBOX_ALIAS --wait 1000 --publish-wait 1000 --security-type AdminsOnly --installation-key ${{ secrets.PACKAGES_KEY }}
 
