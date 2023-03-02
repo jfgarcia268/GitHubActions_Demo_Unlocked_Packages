@@ -30,7 +30,7 @@
       "dependencies": [
         {
             "package": "core",
-            "versionNumber": "2.0.0..LATEST"
+            "versionNumber": "2.0.0.LATEST"
         }
       ]
     },
