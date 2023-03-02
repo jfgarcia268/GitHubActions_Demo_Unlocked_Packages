@@ -21,9 +21,16 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    - name: Set Up Variables
+      id: setup_variables
+      run: |
+        CLIENT_ID = ${ORG_NAME} + '_CLIENTID'
+        USERNAME = ${ORG_NAME} + '_SANDBOX_USERNAME'
+        echo "CLIENT_ID=${CLIENT_ID}\n" >> $GITHUB_OUTPUT
+        echo "USERNAME=${USERNAME}\n" >> $GITHUB_OUTPUT
+        echo "GITHUB_OUTPUT:"
+        cat "$GITHUB_OUTPUT"
     - name: Login To Orgs
-      env:
-          ORG_NAME: ${{ inputs.environment }} 
       run: |
         echo "${{ secrets.RSA_PRIVATE_KEY }}"   > server.key
         echo "### Login DevHub"
@@ -31,7 +38,7 @@ jobs:
         echo "### Login To Org"
         CLIENT_ID = ${ORG_NAME} + '_CLIENTID'
         USERNAME = ${ORG_NAME} + '_SANDBOX_USERNAME'
-        sfdx auth:jwt:grant --clientid ${{ secrets[${CLIENT_ID}] }}  --jwtkeyfile server.key --username ${{ secrets[${USERNAME}] }} --instanceurl https://test.salesforce.com --setalias SANDBOX_ALIAS
+        sfdx auth:jwt:grant --clientid ${{ secrets[steps.setup_variables.outputs.CLIENT_ID] }}  --jwtkeyfile server.key --username ${{ secrets[steps.setup_variables.outputs.USERNAME] }} --instanceurl https://test.salesforce.com --setalias SANDBOX_ALIAS
         sfdx org:list
     - name: Core - Install Salesforce Package
       run: |
