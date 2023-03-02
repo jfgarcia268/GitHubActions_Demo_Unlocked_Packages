@@ -23,9 +23,11 @@ jobs:
         fetch-depth: 0
     - name: Set Up Variables
       id: setup_variables
+      env:
+          ORG_NAME: ${{ inputs.environment }}
       run: |
-        CLIENT_ID = ${ORG_NAME} + '_CLIENTID'
-        USERNAME = ${ORG_NAME} + '_SANDBOX_USERNAME'
+        CLIENT_ID = "${ORG_NAME}_CLIENTID"
+        USERNAME = "${ORG_NAME}_SANDBOX_USERNAME
         echo "CLIENT_ID=${CLIENT_ID}\n" >> $GITHUB_OUTPUT
         echo "USERNAME=${USERNAME}\n" >> $GITHUB_OUTPUT
         echo "GITHUB_OUTPUT:"
